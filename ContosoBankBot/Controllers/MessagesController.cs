@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ContosoBankBot.Dialogs;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 
@@ -19,61 +21,30 @@ namespace ContosoBankBot
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+
+
             if (activity.Type == ActivityTypes.Message)
             {
-                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                StateClient stateClient = activity.GetStateClient();
-
-                BotData userData = await stateClient.BotState.GetUserDataAsync(activity.ChannelId, activity.From.Id);
-
-                var userMessage = activity.Text;
-
-                string endOutput = null;
-
-                //calculate something for us to return
-                if (userData.GetProperty<bool>("SentGreeting"))
-                {
-                
-                }
-                else
-                {
-                    userData.SetProperty<bool>("SentGreeting", true);
-                    await stateClient.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, userData);
-                }
-
-
-                bool isBankRequest = true;
-
-                if (userMessage.ToLower().Contains("help"))
-                {
-                    endOutput = "Help Text";
-                    isBankRequest = false;
-                }
-
-
-
-
-
-                if (!isBankRequest)
-                {
-                    // return our reply to the user
-                    Activity infoReply = activity.CreateReply(endOutput);
-
-                    await connector.Conversations.ReplyToActivityAsync(infoReply);
-                }
-
-
-                // return our reply to the user
-                Activity reply = activity.CreateReply($"You sent {endOutput}");
-                await connector.Conversations.ReplyToActivityAsync(reply);
+                await Conversation.SendAsync(activity, () => new ContosoLuisDialog());
             }
+
             else
             {
-                HandleSystemMessage(activity);
+                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                var reply = HandleSystemMessage(activity);
+                if (reply != null)
+                    await connector.Conversations.ReplyToActivityAsync(reply);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
+
+
+
+
+
+
+
 
         private Activity HandleSystemMessage(Activity message)
         {
@@ -82,11 +53,26 @@ namespace ContosoBankBot
                 // Implement user deletion here
                 // If we handle user deletion, return a real message
             }
-            else if (message.Type == "BotAddedToConversation")
+            else if (message.Type == ActivityTypes.ConversationUpdate)
             {
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
+
+                string replyMessage = string.Empty;
+                replyMessage += "Hi there\n\n";
+
+                replyMessage += "I am ContasoBot and I am here to help you  \n";
+
+
+                replyMessage += "Currently I have following features  \n";
+
+                replyMessage += "* '\n\n";
+
+                replyMessage += "If you require help at any time, please type help";
+
+                return message.CreateReply(replyMessage);
+
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
