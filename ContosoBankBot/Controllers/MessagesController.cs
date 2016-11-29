@@ -78,8 +78,7 @@ namespace ContosoBankBot.Controllers
 
                     string message = "* For example type Convert 100 NZD to AUD to convert " +
                                      "100 New Zealand Dollars to Australian Dollars " +
-                                     "please note - this feature is constantly being improved"
-                                     + "* To view previous currency conversions type 'get conversion history'";
+                                     "* To view previous currency conversions type 'get conversion history'";
 
                     Activity currencyhelpReply = activity.CreateReply(message);
                     currencyhelpReply.Recipient = activity.From;
