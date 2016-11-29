@@ -25,7 +25,7 @@ namespace ContosoBankBot.Controllers
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-
+            // Features to add in the future will include user accounts 
 
             if (activity.Type == ActivityTypes.Message)
             {
@@ -49,7 +49,7 @@ namespace ContosoBankBot.Controllers
 
                 if (userMessage.ToLower().Contains("help"))
                 {
-
+                    // Need more content here 
                     string message = "* For Help on Currency Conversion please type currencyhelp";
 
                     Activity helpReply = activity.CreateReply(message);
