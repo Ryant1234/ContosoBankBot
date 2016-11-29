@@ -39,7 +39,7 @@ namespace ContosoBankBot.Controllers
 
                 var userMessage = activity.Text;
 
-                string endOutput = "Hello";
+                string endOutput = "";
 
 
                 bool isLuisDialog = true;
@@ -87,11 +87,16 @@ namespace ContosoBankBot.Controllers
 
                         foreach (ConversionHistory t in history)
 
-                            endOutput += "On [" + t.DateChecked + "] you converted  " + t.CurrencyAmount +
-                                         t.CurrencyFrom + t.CurrencyTo + "\n\n"
-                                         + " the converted amount was" + t.ConvertedAmount;
+                            endOutput += " [" + t.DateChecked + "] you converted " + t.CurrencyAmount + " " +
+                                         t.CurrencyFrom + " to " + t.CurrencyTo 
+                                         + " the converted amount was $" + t.ConvertedAmount + "\n\n";
                     }
-                    ;
+
+
+                    Activity currencyReply = activity.CreateReply(endOutput);
+                    currencyReply.Recipient = activity.From;
+                    currencyReply.Type = "message";
+                    await connecter.Conversations.SendToConversationAsync(currencyReply);
 
                 }
 

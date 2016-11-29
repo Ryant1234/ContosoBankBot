@@ -9,7 +9,7 @@ namespace ContosoBankBot.DataModels
     public class ConversionHistory
     {
         [JsonProperty(PropertyName = "id")]
-        public int id { get; set; }
+        public string id { get; set; }
 
         [JsonProperty(PropertyName = "currencyFrom")]
         public string CurrencyFrom { get; set; }
