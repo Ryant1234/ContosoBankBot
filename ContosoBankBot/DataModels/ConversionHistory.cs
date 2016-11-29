@@ -25,5 +25,8 @@ namespace ContosoBankBot.DataModels
 
         [JsonProperty(PropertyName = "dateChecked")]
         public DateTime DateChecked { get; set; }
+
+        [JsonProperty(PropertyName = "convertedAmount")]
+        public double ConvertedAmount { get; set; }
     }
 }
