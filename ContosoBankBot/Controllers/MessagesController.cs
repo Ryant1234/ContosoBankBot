@@ -178,7 +178,7 @@ namespace ContosoBankBot.Controllers
                         {
                             endOutput += " [" + t.DateChecked + "] you converted " + t.CurrencyAmount + " " +
                                          t.CurrencyFrom + " to " + t.CurrencyTo
-                                         + " the converted amount was $" + t.ConvertedAmount + "\n\n";
+                                         + " the converted amount was " + t.ConvertedAmount + "\n\n";
                         }
 
                         Activity currencyReply = activity.CreateReply(endOutput);
