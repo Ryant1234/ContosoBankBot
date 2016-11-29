@@ -20,12 +20,61 @@ namespace ContosoBankBot.Dialogs
         {
             await
                 context.PostAsync(
-                    "Due to the lack of Customers visiting our Redmond branches, we have closed them"); 
-                                  
+                    "Due to the lack of Customers visiting our Redmond branches, we have closed them");
+
             context.Wait(MessageReceived);
 
         }
 
+
+
+        [LuisIntent("GetStockValue")]
+        public async Task GetStockValue(IDialogContext context, LuisResult result)
+
+        {
+            string stockName = string.Empty;
+            string replyText = string.Empty;
+
+            try
+            {
+
+
+                replyText = GenerateResponseForStockValue(stockName, 5);
+                await context.PostAsync(replyText);
+            }
+            catch (Exception)
+            {
+
+                await context.PostAsync("Something went wrong, please try again later");
+            }
+            finally
+            {
+                context.Wait(MessageReceived);
+            }
+
+        }
+
+
+
+
+
+        /// <summary>
+        /// Generates a response for the requested stock value
+        /// </summary>
+        /// <param name="stockname"></param>
+        /// <returns></returns>
+        private string GenerateResponseForStockValue(string stockname, int value)
+        {
+            if (string.IsNullOrWhiteSpace(stockname))
+            {
+                return "Error: Nothing detected";
+            }
+
+            //string replyMessage = string.Empty;
+           string replyMessage = $"The value of {stockname} is currently ${value}";
+
+            return replyMessage;
+        }
 
     }
 }
